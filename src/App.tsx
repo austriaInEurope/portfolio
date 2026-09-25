@@ -13,7 +13,7 @@ type AppContextValue = {
   setLanguage: (language: Language) => void
   theme: 'light' | 'dark'
   toggleTheme: () => void
-  t: typeof translations.en
+  t: (typeof translations)[Language]
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
