@@ -1,0 +1,256 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --canvas: #fbfbfd;
+  --surface: #ffffff;
+  --sunken: #f2f2f5;
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+  --line: #e3e3e7;
+  --accent: #0071e3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --canvas: #000000;
+    --surface: #111113;
+    --sunken: #1a1a1d;
+    --ink: #f5f5f7;
+    --muted: #98989d;
+    --line: #2a2a2e;
+    --accent: #2f93ff;
+  }
+}
+
+:root[data-theme='dark'] {
+  --canvas: #000000;
+  --surface: #111113;
+  --sunken: #1a1a1d;
+  --ink: #f5f5f7;
+  --muted: #98989d;
+  --line: #2a2a2e;
+  --accent: #2f93ff;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+  -webkit-text-size-adjust: 100%;
+}
+
+html, body, button, a, section, div {
+  transition: background-color 220ms ease, border-color 220ms ease, color 220ms ease;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+@layer components {
+  /* Display type: tight tracking, the way Apple sets headlines. */
+  .display {
+    @apply font-semibold;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+  }
+
+  .tight {
+    letter-spacing: -0.022em;
+  }
+
+  .pill {
+    @apply rounded-full px-3 py-1.5 text-[13px];
+  }
+
+  .lift {
+    transition:
+      transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+      box-shadow 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  /* Device frame used for the project mockups. */
+  .phone {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 19.45;
+    border-radius: 42px;
+    padding: 8px;
+    background: linear-gradient(160deg, #3a3a3e, #0c0c0e 45%, #3a3a3e);
+    box-shadow:
+      0 30px 60px -24px rgba(0, 0, 0, 0.5),
+      0 2px 6px rgba(0, 0, 0, 0.22);
+  }
+
+  .phone::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 42px;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0) 32%,
+      rgba(255, 255, 255, 0) 68%,
+      rgba(255, 255, 255, 0.1)
+    );
+  }
+
+  .phone-screen {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    border-radius: 35px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .phone-screen img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .notch {
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 31%;
+    height: 18px;
+    border-radius: 12px;
+    background: #000;
+    z-index: 3;
+  }
+
+  /* Horizontal screenshot rail for projects with many screens. */
+  .rail {
+    display: flex;
+    gap: 28px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 4px 4px 22px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+
+  .rail::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .rail::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 99px;
+  }
+
+  .rail figure {
+    flex: 0 0 auto;
+    width: 200px;
+    margin: 0;
+    scroll-snap-align: center;
+  }
+}
+
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-4px);
+  }
+}
+
+a:focus-visible,
+button:focus-visible,
+.rail:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+/* One quiet reveal, shared by every section. */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.scanline {
+  animation: sweep 3.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes sweep {
+  0%,
+  100% {
+    transform: translateY(-120px);
+  }
+  50% {
+    transform: translateY(120px);
+  }
+}
+
+.spin {
+  transform-origin: 195px 420px;
+  animation: spin 22s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pulse {
+  animation: pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .scanline,
+  .spin,
+  .pulse {
+    animation: none;
+  }
+  .lift:hover {
+    transform: none;
+  }
+  .rail {
+    scroll-behavior: auto;
+  }
+}
+
+
+.theme-toggle {
+  -webkit-tap-highlight-color: transparent;
+}
